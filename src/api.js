@@ -74,16 +74,28 @@ JSON uniquement :
 }`,
   }
 
-  const response = await fetch('/api/generate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: prompts[category] || prompts.autres })
-  })
+  const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY || ''
+  const prompt = prompts[category] || prompts.autres
 
-  if (!response.ok) throw new Error(`API Error: ${response.status}`)
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 1200, temperature: 0.7 },
+      }),
+    }
+  )
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}))
+    throw new Error(err.error?.message || `Erreur ${response.status}`)
+  }
 
   const data = await response.json()
-  const text = data.text || ''
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
   const clean = text.replace(/```json\n?|```/g, '').trim()
   const start = clean.indexOf('{')
   const end = clean.lastIndexOf('}')
