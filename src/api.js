@@ -1,29 +1,3 @@
-// ────────────────────────────────────────────────────────────
-// api.js — Appels à l'Anthropic API pour la génération de recettes
-// ────────────────────────────────────────────────────────────
-//
-// NOTE : En production, NE JAMAIS exposer une clé API côté client.
-// Deux options :
-//   1. Proxy backend (Node/Express/Next.js) qui relaie les appels
-//   2. Utiliser un serveur BFF (Backend for Frontend)
-//
-// Pour dev local avec Claude Code : l'appel direct fonctionne si
-// vous utilisez un proxy CORS ou un backend local.
-//
-// Variable d'environnement à créer dans .env :
-//   VITE_ANTHROPIC_API_KEY=sk-ant-...
-//   VITE_API_BASE_URL=http://localhost:3001  (si proxy backend)
-// ────────────────────────────────────────────────────────────
-
-const MODEL = 'claude-haiku-4-5-20251001'
-const MAX_TOKENS = 1200
-
-/**
- * Génère une fiche recette complète via l'API Anthropic.
- * @param {Object} item - L'item du menu (cocktail, bière, vin, café, autre)
- * @param {string} category - La catégorie ('cocktails' | 'bieres' | 'vins' | 'cafes' | 'autres')
- * @returns {Promise<Object>} - La fiche JSON parsée
- */
 export async function generateRecipe(item, category) {
   const prompts = {
     cocktails: `Tu es un barman expert. Génère une fiche cocktail complète pour "${item.name}" (${item.origin}).
@@ -103,20 +77,14 @@ JSON uniquement :
   const response = await fetch('/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
-      messages: [{ role: 'user', content: prompts[category] || prompts.autres }]
-    })
+    body: JSON.stringify({ prompt: prompts[category] || prompts.autres })
   })
 
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.status}`)
-  }
+  if (!response.ok) throw new Error(`API Error: ${response.status}`)
 
   const data = await response.json()
-  const text = data.content.map(b => b.text || '').join('')
-  const clean = text.replace(/```json|```/g, '').trim()
+  const text = data.text || ''
+  const clean = text.replace(/```json\n?|```/g, '').trim()
   const start = clean.indexOf('{')
   const end = clean.lastIndexOf('}')
   return JSON.parse(clean.slice(start, end + 1))

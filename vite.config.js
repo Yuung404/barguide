@@ -18,19 +18,21 @@ export default defineConfig(({ mode }) => {
             req.on('data', c => chunks.push(c))
             req.on('end', async () => {
               try {
-                const body = Buffer.concat(chunks).toString()
-                const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+                const { prompt } = JSON.parse(Buffer.concat(chunks).toString())
+                const apiKey = env.GOOGLE_AI_API_KEY || ''
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+                const upstream = await fetch(url, {
                   method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': env.ANTHROPIC_API_KEY || '',
-                    'anthropic-version': '2023-06-01',
-                  },
-                  body,
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { maxOutputTokens: 1200, temperature: 0.7 },
+                  }),
                 })
                 const data = await upstream.json()
-                res.writeHead(upstream.status, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify(data))
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+                res.writeHead(upstream.ok ? 200 : upstream.status, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify(upstream.ok ? { text } : { error: data.error?.message }))
               } catch (err) {
                 res.writeHead(500, { 'Content-Type': 'application/json' })
                 res.end(JSON.stringify({ error: err.message }))
