@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { RECIPES } from './data/recipes-all.js';
 
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
@@ -620,19 +621,27 @@ JSON uniquement: {"dosage":{"param":"valeur"},"equipment":{"ideal":["..."],"debr
 JSON uniquement: {"description_complete":"...","ingredients":[{"name":"...","amount":"...","alternatives":["..."]}],"equipment":{"ideal":["..."],"debrouille":["..."],"rien":["..."]},"steps":["..."],"tips":"...","notes":"info culturelle ou historique courte"}`,
   };
 
-  const r = await fetch("https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  if (!apiKey) throw new Error('Clé API manquante');
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true',
+    },
     body:JSON.stringify({
-      model:"claude-sonnet-4-20250514",
-      max_tokens:1000,
-      messages:[{role:"user",content:prompts[category]||prompts.autres}]
-    })
+      model:'claude-haiku-4-5',
+      max_tokens:1200,
+      messages:[{role:'user',content:prompts[category]||prompts.autres}],
+    }),
   });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Erreur ${r.status}`); }
   const data = await r.json();
-  const txt = data.content.map(b=>b.text||"").join("");
-  const clean = txt.replace(/```json|```/g,"").trim();
-  const s = clean.indexOf("{"), e = clean.lastIndexOf("}");
+  const txt = data.content?.[0]?.text||'';
+  const clean = txt.replace(/```json\n?|```/g,'').trim();
+  const s=clean.indexOf('{'), e=clean.lastIndexOf('}');
   return JSON.parse(clean.slice(s,e+1));
 }
 
@@ -739,9 +748,10 @@ function Modal({item,category,equipMode,setEquipMode,onClose}) {
 
   const load = useCallback(async()=>{
     try { setLoading(true); setError(null);
+      if (RECIPES[category]?.[item.id]) { setData(RECIPES[category][item.id]); return; }
       const r = await generateRecipe(item,category);
       setData(r);
-    } catch(e) { setError("Génération échouée. Réessayez."); }
+    } catch(e) { setError("Recette non disponible sans clé API."); }
     finally { setLoading(false); }
   },[item.id,category]);
 
