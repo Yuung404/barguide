@@ -708,156 +708,166 @@ function getGlassType(d=''){
 }
 
 function GlassIcon({glass='',size=72}){
+  const [uid]=useState(()=>Math.random().toString(36).slice(2,8));
   const type=getGlassType(glass);
-  const g='rgba(201,168,76,0.7)';
-  const f='rgba(201,168,76,0.09)';
-  const p={fill:'none',stroke:g,strokeWidth:'1.5',strokeLinecap:'round',strokeLinejoin:'round'};
-  const W=size*0.65, H=size;
-  const shapes={
-    coupe:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M3,16 Q27,6 51,16" />
-        <path d="M3,16 L18,48 Q22,56 27,59 Q32,56 36,48 L51,16" fill={f}/>
-        <line x1="27" y1="59" x2="27" y2="72"/>
-        <path d="M15,72 Q27,70 39,72" /><path d="M12,76 Q27,74 42,76" />
-      </svg>
-    ),
-    martini:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M3,14 L27,54 L51,14 Z" fill={f}/>
-        <line x1="27" y1="54" x2="27" y2="70"/>
-        <line x1="14" y1="70" x2="40" y2="70"/>
-        <line x1="11" y1="74" x2="43" y2="74"/>
-      </svg>
-    ),
-    rocks:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M8,20 L10,72 L44,72 L46,20 Z" fill={f}/>
-        <line x1="8" y1="20" x2="46" y2="20"/>
-      </svg>
-    ),
-    highball:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M14,10 L12,74 L42,74 L40,10 Z" fill={f}/>
-        <line x1="14" y1="10" x2="40" y2="10"/>
-      </svg>
-    ),
-    shot:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M18,34 L19,66 L35,66 L36,34 Z" fill={f}/>
-        <line x1="18" y1="34" x2="36" y2="34"/>
-      </svg>
-    ),
-    flute:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M20,10 C17,30 18,52 21,58 L21,72 M34,10 C37,30 36,52 33,58 L33,72" />
-        <path d="M20,10 Q27,6 34,10"/>
-        <path d="M21,58 Q27,62 33,58" fill={f}/>
-        <line x1="21" y1="72" x2="33" y2="72"/>
-        <line x1="16" y1="76" x2="38" y2="76"/>
-        <line x1="13" y1="80" x2="41" y2="80"/>
-      </svg>
-    ),
-    wine:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M7,12 C5,28 11,48 21,54 L21,70 M47,12 C49,28 43,48 33,54 L33,70" />
-        <path d="M7,12 Q27,6 47,12"/>
-        <path d="M21,54 Q27,57 33,54" fill={f}/>
-        <line x1="21" y1="70" x2="33" y2="70"/>
-        <line x1="15" y1="74" x2="39" y2="74"/>
-        <line x1="12" y1="78" x2="42" y2="78"/>
-      </svg>
-    ),
-    hurricane:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M12,10 C7,22 15,36 11,50 C9,60 13,70 17,76 L37,76 C41,70 45,60 43,50 C39,36 47,22 42,10 Z" fill={f}/>
-        <line x1="12" y1="10" x2="42" y2="10"/>
-        <line x1="17" y1="76" x2="37" y2="76"/>
-      </svg>
-    ),
-    tiki:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M10,16 L10,74 Q27,78 44,74 L44,16 Q27,12 10,16 Z" fill={f}/>
-        <ellipse cx="27" cy="16" rx="17" ry="4"/>
-        <path d="M17,32 C19,30 22,30 24,32"/><path d="M30,32 C32,30 35,30 37,32"/>
-        <path d="M21,44 C23,48 31,48 33,44"/>
-      </svg>
-    ),
-    mug:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M10,18 L10,72 L40,72 L40,18 Z" fill={f}/>
-        <line x1="10" y1="18" x2="40" y2="18"/>
-        <path d="M40,32 C50,32 52,44 50,50 C48,56 40,56 40,56"/>
-      </svg>
-    ),
-    pint:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M13,10 L10,74 L44,74 L41,10 Z" fill={f}/>
-        <line x1="13" y1="10" x2="41" y2="10"/>
-        <line x1="10" y1="74" x2="44" y2="74"/>
-      </svg>
-    ),
-    snifter:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M4,16 C2,32 8,52 20,58 L20,68 M50,16 C52,32 46,52 34,58 L34,68" />
-        <path d="M4,16 Q27,8 50,16"/>
-        <path d="M20,58 Q27,62 34,58" fill={f}/>
-        <line x1="20" y1="68" x2="34" y2="68"/>
-        <line x1="17" y1="72" x2="37" y2="72"/>
-        <line x1="14" y1="76" x2="40" y2="76"/>
-      </svg>
-    ),
-    tulip:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M14,10 C11,10 10,24 12,38 C10,50 12,66 16,74 L38,74 C42,66 44,50 42,38 C44,24 43,10 40,10 Z" fill={f}/>
-        <line x1="14" y1="10" x2="40" y2="10"/>
-        <line x1="16" y1="74" x2="38" y2="74"/>
-      </svg>
-    ),
-    weizen:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M18,10 C14,10 11,30 13,48 C11,62 9,74 9,78 L45,78 C45,74 43,62 41,48 C43,30 40,10 36,10 Z" fill={f}/>
-        <line x1="18" y1="10" x2="36" y2="10"/>
-        <line x1="9" y1="78" x2="45" y2="78"/>
-      </svg>
-    ),
-    goblet:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M5,14 C3,28 9,46 18,52 L18,64 M49,14 C51,28 45,46 36,52 L36,64" />
-        <path d="M5,14 Q27,8 49,14"/>
-        <path d="M18,52 Q27,56 36,52" fill={f}/>
-        <line x1="18" y1="64" x2="36" y2="64"/>
-        <line x1="13" y1="68" x2="41" y2="68"/>
-        <line x1="9" y1="72" x2="45" y2="72"/>
-        <line x1="6" y1="76" x2="48" y2="76"/>
-      </svg>
-    ),
-    margarita:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M2,18 Q27,10 52,18" />
-        <path d="M2,18 L14,42 Q18,52 27,56 Q36,52 40,42 L52,18" fill={f}/>
-        <line x1="27" y1="56" x2="27" y2="70"/>
-        <path d="M14,70 Q27,68 40,70" /><path d="M11,74 Q27,72 43,74" />
-      </svg>
-    ),
-    espresso:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M14,30 L16,58 L38,58 L40,30 Z" fill={f}/>
-        <line x1="14" y1="30" x2="40" y2="30"/>
-        <path d="M38,38 C46,38 48,50 46,54 C44,58 38,56 38,56"/>
-        <path d="M6,62 Q27,58 48,62 Q27,68 6,62 Z" fill={f}/>
-      </svg>
-    ),
-    cup:(
-      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
-        <path d="M10,22 L12,62 L42,62 L44,22 Z" fill={f}/>
-        <line x1="10" y1="22" x2="44" y2="22"/>
-        <path d="M42,32 C52,32 54,46 52,52 C50,58 42,56 42,56"/>
-        <path d="M4,66 Q27,62 50,66 Q27,72 4,66 Z" fill={f}/>
-      </svg>
-    ),
+  const W=Math.round(size*0.65), H=size;
+  const cl=`gc-${uid}`;
+  // Liquid & glass colors
+  const liq='rgba(201,168,76,0.42)';
+  const liqD='rgba(160,110,30,0.55)';
+  const shine='rgba(255,255,255,0.18)';
+  const rim='rgba(201,168,76,0.80)';
+  const gfill='rgba(180,210,255,0.05)';
+  // Shared SVG props for outline paths
+  const ol={fill:'none',stroke:rim,strokeWidth:'1.6',strokeLinecap:'round',strokeLinejoin:'round'};
+
+  const render=(clipD,liqY,body,extra=null)=>(
+    <svg viewBox="0 0 54 84" width={W} height={H}>
+      <defs>
+        <clipPath id={cl}><path d={clipD}/></clipPath>
+        <linearGradient id={`lg-${cl}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={liqD}/>
+          <stop offset="40%" stopColor={liq}/>
+          <stop offset="100%" stopColor={liqD}/>
+        </linearGradient>
+      </defs>
+      {/* liquid fill */}
+      <rect x="0" y={liqY} width="54" height={84} fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+      {/* liquid surface shimmer */}
+      <rect x="0" y={liqY} width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+      {/* left-side glass shine */}
+      <rect x="6" y="0" width="5" height="84" fill={shine} clipPath={`url(#${cl})`}/>
+      {/* glass body */}
+      <path d={clipD} fill={gfill} {...ol}/>
+      {extra}
+    </svg>
+  );
+
+  const S={
+    highball: render("M14,10 L12,74 L42,74 L40,10 Z",34,null,<line x1="14" y1="10" x2="40" y2="10" {...ol}/>),
+    rocks:    render("M8,20 L10,72 L44,72 L46,20 Z",38,null,<line x1="8" y1="20" x2="46" y2="20" {...ol}/>),
+    shot:     render("M18,34 L19,66 L35,66 L36,34 Z",50,null,<line x1="18" y1="34" x2="36" y2="34" {...ol}/>),
+    pint:     render("M13,10 L10,74 L44,74 L41,10 Z",32,null,<><line x1="13" y1="10" x2="41" y2="10" {...ol}/><line x1="10" y1="74" x2="44" y2="74" {...ol}/></>),
+    tulip:    render("M14,10 C11,10 10,24 12,38 C10,50 12,66 16,74 L38,74 C42,66 44,50 42,38 C44,24 43,10 40,10 Z",30,null,<><line x1="14" y1="10" x2="40" y2="10" {...ol}/><line x1="16" y1="74" x2="38" y2="74" {...ol}/></>),
+    weizen:   render("M18,10 C14,10 11,30 13,48 C11,62 9,74 9,78 L45,78 C45,74 43,62 41,48 C43,30 40,10 36,10 Z",28,null,<><line x1="18" y1="10" x2="36" y2="10" {...ol}/><line x1="9" y1="78" x2="45" y2="78" {...ol}/></>),
+    hurricane:render("M12,10 C7,22 15,36 11,50 C9,60 13,70 17,76 L37,76 C41,70 45,60 43,50 C39,36 47,22 42,10 Z",30,null,<><line x1="12" y1="10" x2="42" y2="10" {...ol}/><line x1="17" y1="76" x2="37" y2="76" {...ol}/></>),
+    tiki:     render("M10,16 L10,74 Q27,78 44,74 L44,16 Q27,12 10,16 Z",28,null,<><ellipse cx="27" cy="16" rx="17" ry="4" fill="none" stroke={rim} strokeWidth="1.4"/><path d="M17,34 C19,32 22,32 24,34M30,34 C32,32 35,32 37,34M21,46 C23,50 31,50 33,46" fill="none" stroke={rim} strokeWidth="1.2" strokeLinecap="round"/></>),
+    mug:      render("M10,18 L10,72 L40,72 L40,18 Z",30,null,<><line x1="10" y1="18" x2="40" y2="18" {...ol}/><path d="M40,32 C50,32 52,44 50,50 C48,56 40,56 40,56" fill="none" stroke={rim} strokeWidth="1.6" strokeLinecap="round"/></>),
+    martini:(()=>{
+      const d="M3,14 L27,54 L51,14 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="36" width="54" height="20" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="36" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="6" y="0" width="5" height="55" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <line x1="27" y1="54" x2="27" y2="70" {...ol}/><line x1="14" y1="70" x2="40" y2="70" {...ol}/><line x1="11" y1="74" x2="43" y2="74" {...ol}/>
+      </svg>);
+    })(),
+    coupe:(()=>{
+      const d="M3,16 L18,48 Q22,56 27,59 Q32,56 36,48 L51,16 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="36" width="54" height="25" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="36" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="6" y="0" width="5" height="60" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d="M3,16 Q27,6 51,16" fill="none" {...ol}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <line x1="27" y1="59" x2="27" y2="72" {...ol}/><path d="M15,72 Q27,70 39,72" fill="none" {...ol}/><path d="M12,76 Q27,74 42,76" fill="none" {...ol}/>
+      </svg>);
+    })(),
+    flute:(()=>{
+      const d="M20,10 C17,30 18,52 21,58 L33,58 C36,52 37,30 34,10 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="34" width="54" height="26" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="34" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="18" y="0" width="4" height="60" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <path d="M20,10 Q27,6 34,10" fill="none" {...ol}/>
+        <path d="M21,58 Q27,62 33,58" fill="none" {...ol}/>
+        <line x1="21" y1="72" x2="33" y2="72" {...ol}/><line x1="16" y1="76" x2="38" y2="76" {...ol}/><line x1="13" y1="80" x2="41" y2="80" {...ol}/>
+      </svg>);
+    })(),
+    wine:(()=>{
+      const d="M7,12 C5,28 11,48 21,54 L33,54 C43,48 49,28 47,12 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="34" width="54" height="22" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="34" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="9" y="0" width="5" height="56" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <path d="M7,12 Q27,6 47,12" fill="none" {...ol}/>
+        <path d="M21,54 Q27,57 33,54" fill="none" {...ol}/>
+        <line x1="21" y1="70" x2="33" y2="70" {...ol}/><line x1="15" y1="74" x2="39" y2="74" {...ol}/><line x1="12" y1="78" x2="42" y2="78" {...ol}/>
+      </svg>);
+    })(),
+    snifter:(()=>{
+      const d="M4,16 C2,32 8,52 20,58 L34,58 C46,52 52,32 50,16 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="36" width="54" height="24" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="36" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="6" y="0" width="6" height="60" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <path d="M4,16 Q27,8 50,16" fill="none" {...ol}/>
+        <path d="M20,58 Q27,62 34,58" fill="none" {...ol}/>
+        <line x1="20" y1="68" x2="34" y2="68" {...ol}/><line x1="17" y1="72" x2="37" y2="72" {...ol}/><line x1="14" y1="76" x2="40" y2="76" {...ol}/>
+      </svg>);
+    })(),
+    goblet:(()=>{
+      const d="M5,14 C3,28 9,46 18,52 L36,52 C45,46 51,28 49,14 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="32" width="54" height="22" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="32" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="7" y="0" width="6" height="54" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <path d="M5,14 Q27,8 49,14" fill="none" {...ol}/>
+        <path d="M18,52 Q27,56 36,52" fill="none" {...ol}/>
+        <line x1="18" y1="64" x2="36" y2="64" {...ol}/><line x1="13" y1="68" x2="41" y2="68" {...ol}/><line x1="9" y1="72" x2="45" y2="72" {...ol}/><line x1="6" y1="76" x2="48" y2="76" {...ol}/>
+      </svg>);
+    })(),
+    margarita:(()=>{
+      const d="M2,18 L14,42 Q18,52 27,56 Q36,52 40,42 L52,18 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="36" width="54" height="22" fill={`url(#lg-${cl})`} clipPath={`url(#${cl})`}/>
+        <rect x="0" y="36" width="54" height="2" fill="rgba(255,255,255,0.2)" clipPath={`url(#${cl})`}/>
+        <rect x="5" y="0" width="6" height="58" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d="M2,18 Q27,10 52,18" fill="none" {...ol}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <line x1="27" y1="56" x2="27" y2="70" {...ol}/><path d="M14,70 Q27,68 40,70" fill="none" {...ol}/><path d="M11,74 Q27,72 43,74" fill="none" {...ol}/>
+      </svg>);
+    })(),
+    espresso:(()=>{
+      const d="M14,30 L16,58 L38,58 L40,30 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="42" width="54" height="18" fill="rgba(60,30,10,0.7)" clipPath={`url(#${cl})`}/>
+        <rect x="0" y="42" width="54" height="2" fill="rgba(255,255,255,0.15)" clipPath={`url(#${cl})`}/>
+        <rect x="16" y="0" width="5" height="60" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <line x1="14" y1="30" x2="40" y2="30" {...ol}/>
+        <path d="M38,38 C46,38 48,50 46,54 C44,58 38,56 38,56" fill="none" {...ol}/>
+        <path d="M6,62 Q27,58 48,62 Q27,68 6,62 Z" fill="rgba(201,168,76,0.08)" stroke={rim} strokeWidth="1.4"/>
+      </svg>);
+    })(),
+    cup:(()=>{
+      const d="M10,22 L12,62 L42,62 L44,22 Z";
+      return(<svg viewBox="0 0 54 84" width={W} height={H}>
+        <defs><clipPath id={cl}><path d={d}/></clipPath></defs>
+        <rect x="0" y="36" width="54" height="28" fill="rgba(60,30,10,0.6)" clipPath={`url(#${cl})`}/>
+        <rect x="0" y="36" width="54" height="2" fill="rgba(255,255,255,0.15)" clipPath={`url(#${cl})`}/>
+        <rect x="12" y="0" width="6" height="64" fill={shine} clipPath={`url(#${cl})`}/>
+        <path d={d} fill={gfill} {...ol}/>
+        <line x1="10" y1="22" x2="44" y2="22" {...ol}/>
+        <path d="M42,32 C52,32 54,46 52,52 C50,58 42,56 42,56" fill="none" {...ol}/>
+        <path d="M4,66 Q27,62 50,66 Q27,72 4,66 Z" fill="rgba(201,168,76,0.07)" stroke={rim} strokeWidth="1.4"/>
+      </svg>);
+    })(),
   };
-  return shapes[type]||shapes.highball;
+  return S[type]||S.highball;
 }
 
 const GLASS_ALTS = {
@@ -1074,11 +1084,26 @@ function AutresBody({data,equipMode}) {
   </>);
 }
 
+function useDrinkImage(name,category){
+  const [url,setUrl]=useState(null);
+  useEffect(()=>{
+    if(category!=='cocktails') return;
+    let ok=true;
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(name)}`)
+      .then(r=>r.json())
+      .then(d=>{ if(ok&&d.drinks?.[0]?.strDrinkThumb) setUrl(d.drinks[0].strDrinkThumb); })
+      .catch(()=>{});
+    return ()=>{ ok=false; };
+  },[name,category]);
+  return url;
+}
+
 function Modal({item,category,equipMode,setEquipMode,onClose}) {
   const [data,setData] = useState(null);
   const [loading,setLoading] = useState(true);
   const [error,setError] = useState(null);
   const loaded = useRef(false);
+  const drinkImg = useDrinkImage(item.name, category);
 
   const load = useCallback(async()=>{
     try { setLoading(true); setError(null);
@@ -1097,19 +1122,30 @@ function Modal({item,category,equipMode,setEquipMode,onClose}) {
   return(
     <div className="ov" onClick={e=>{if(e.target.classList.contains("ov"))onClose()}}>
       <div className="modal">
-        <div className="mhdr">
-          <div className="memo">{item.emoji}</div>
+        {drinkImg&&(
+          <div style={{position:'relative',width:'100%',height:'210px',overflow:'hidden',flexShrink:0}}>
+            <img src={drinkImg} alt={item.name} style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+            <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(7,7,15,0.25) 0%,rgba(7,7,15,0) 40%,rgba(13,13,26,0.7) 80%,var(--s1) 100%)'}}/>
+            <button className="mclose" onClick={onClose} style={{position:'absolute',top:'12px',right:'14px',zIndex:10}}>✕</button>
+            <div style={{position:'absolute',bottom:'12px',left:'18px'}}>
+              <div style={{fontFamily:'var(--fd)',fontSize:'22px',fontWeight:'700',color:'#fff',textShadow:'0 2px 12px rgba(0,0,0,0.8)',letterSpacing:'.06em'}}>{item.name}</div>
+              {item.origin&&<div style={{fontSize:'11px',color:'rgba(255,255,255,0.7)',fontStyle:'italic',marginTop:'2px'}}>{item.origin}</div>}
+            </div>
+          </div>
+        )}
+        <div className="mhdr" style={drinkImg?{paddingTop:'10px'}:{}}>
+          {!drinkImg&&<div className="memo">{item.emoji}</div>}
           <div style={{flex:1}}>
-            <div className="mtitle">{item.name}</div>
+            {!drinkImg&&<div className="mtitle">{item.name}</div>}
             <div className="morigin">
-              {item.origin&&<span>{item.origin}</span>}
+              {!drinkImg&&item.origin&&<span>{item.origin}</span>}
               {item.iba&&<span className="badge bp">{item.iba}</span>}
               {item.abv&&<span className="badge br">{item.abv}% ABV</span>}
               {item.diff&&<span className="badge bb">{dlabel(item.diff)}</span>}
             </div>
             <div className="mdesc">{item.desc}</div>
           </div>
-          <button className="mclose" onClick={onClose}>✕</button>
+          {!drinkImg&&<button className="mclose" onClick={onClose}>✕</button>}
         </div>
         {showEquip&&(
           <div className="etog">
