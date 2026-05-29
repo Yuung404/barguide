@@ -708,7 +708,7 @@ JSON uniquement: {"description_complete":"...","ingredients":[{"name":"...","amo
       'anthropic-dangerous-direct-browser-access':'true',
     },
     body:JSON.stringify({
-      model:'claude-haiku-4-5',
+      model:'claude-haiku-4-5-20251001',
       max_tokens:1200,
       messages:[{role:'user',content:prompts[category]||prompts.autres}],
     }),
@@ -827,7 +827,7 @@ function Modal({item,category,equipMode,setEquipMode,onClose}) {
       if (RECIPES[category]?.[item.id]) { setData(RECIPES[category][item.id]); return; }
       const r = await generateRecipe(item,category);
       setData(r);
-    } catch(e) { setError("Recette non disponible sans clé API."); }
+    } catch(e) { setError(e.message||"Génération échouée. Réessayez."); }
     finally { setLoading(false); }
   },[item.id,category]);
 
