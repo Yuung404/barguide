@@ -681,6 +681,201 @@ const CATEGORIES = [
 
 const EQUIP_MODES = [{id:"ideal",label:"Idéal"},{id:"debrouille",label:"Débrouille"},{id:"rien",label:"Sans rien"}];
 
+// ── GLASS ICONS ──
+function getGlassType(d=''){
+  const s=d.toLowerCase();
+  if(s.includes('coupe')||s.includes('saucer')) return 'coupe';
+  if(s.includes('martini')||s.includes('verre à cocktail')||s.includes('cocktail')) return 'martini';
+  if(s.includes('old fashioned')||s.includes('rocks')||s.includes('lowball')) return 'rocks';
+  if(s.includes('shot')||s.includes('shooter')) return 'shot';
+  if(s.includes('flûte')||s.includes('flute')) return 'flute';
+  if(s.includes('hurricane')) return 'hurricane';
+  if(s.includes('tiki')) return 'tiki';
+  if(s.includes('cuivre')||s.includes('copper')||s.includes('mule')) return 'mug';
+  if(s.includes('mug')||s.includes('irish')) return 'mug';
+  if(s.includes('pinte')||s.includes('pint')||s.includes('chope')) return 'pint';
+  if(s.includes('ballon')||s.includes('snifter')||s.includes('cognac')||s.includes('armagnac')) return 'snifter';
+  if(s.includes('tulipe')||s.includes('tulip')) return 'tulip';
+  if(s.includes('weizen')||s.includes('wheat')) return 'weizen';
+  if(s.includes('goblet')||s.includes('calice')||s.includes('trappiste')) return 'goblet';
+  if(s.includes('vin')||s.includes('wine')||s.includes('bordeaux')||s.includes('bourgogne')) return 'wine';
+  if(s.includes('champagne')||s.includes('prosecco')||s.includes('cava')) return 'flute';
+  if(s.includes('espresso')||s.includes('ristretto')||s.includes('tasse')) return 'espresso';
+  if(s.includes('cappuccino')||s.includes('latte')||s.includes('café')) return 'cup';
+  if(s.includes('highball')||s.includes('long')) return 'highball';
+  if(s.includes('margarita')) return 'margarita';
+  return 'highball';
+}
+
+function GlassIcon({glass='',size=72}){
+  const type=getGlassType(glass);
+  const g='rgba(201,168,76,0.7)';
+  const f='rgba(201,168,76,0.09)';
+  const p={fill:'none',stroke:g,strokeWidth:'1.5',strokeLinecap:'round',strokeLinejoin:'round'};
+  const W=size*0.65, H=size;
+  const shapes={
+    coupe:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M3,16 Q27,6 51,16" />
+        <path d="M3,16 L18,48 Q22,56 27,59 Q32,56 36,48 L51,16" fill={f}/>
+        <line x1="27" y1="59" x2="27" y2="72"/>
+        <path d="M15,72 Q27,70 39,72" /><path d="M12,76 Q27,74 42,76" />
+      </svg>
+    ),
+    martini:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M3,14 L27,54 L51,14 Z" fill={f}/>
+        <line x1="27" y1="54" x2="27" y2="70"/>
+        <line x1="14" y1="70" x2="40" y2="70"/>
+        <line x1="11" y1="74" x2="43" y2="74"/>
+      </svg>
+    ),
+    rocks:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M8,20 L10,72 L44,72 L46,20 Z" fill={f}/>
+        <line x1="8" y1="20" x2="46" y2="20"/>
+      </svg>
+    ),
+    highball:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M14,10 L12,74 L42,74 L40,10 Z" fill={f}/>
+        <line x1="14" y1="10" x2="40" y2="10"/>
+      </svg>
+    ),
+    shot:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M18,34 L19,66 L35,66 L36,34 Z" fill={f}/>
+        <line x1="18" y1="34" x2="36" y2="34"/>
+      </svg>
+    ),
+    flute:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M20,10 C17,30 18,52 21,58 L21,72 M34,10 C37,30 36,52 33,58 L33,72" />
+        <path d="M20,10 Q27,6 34,10"/>
+        <path d="M21,58 Q27,62 33,58" fill={f}/>
+        <line x1="21" y1="72" x2="33" y2="72"/>
+        <line x1="16" y1="76" x2="38" y2="76"/>
+        <line x1="13" y1="80" x2="41" y2="80"/>
+      </svg>
+    ),
+    wine:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M7,12 C5,28 11,48 21,54 L21,70 M47,12 C49,28 43,48 33,54 L33,70" />
+        <path d="M7,12 Q27,6 47,12"/>
+        <path d="M21,54 Q27,57 33,54" fill={f}/>
+        <line x1="21" y1="70" x2="33" y2="70"/>
+        <line x1="15" y1="74" x2="39" y2="74"/>
+        <line x1="12" y1="78" x2="42" y2="78"/>
+      </svg>
+    ),
+    hurricane:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M12,10 C7,22 15,36 11,50 C9,60 13,70 17,76 L37,76 C41,70 45,60 43,50 C39,36 47,22 42,10 Z" fill={f}/>
+        <line x1="12" y1="10" x2="42" y2="10"/>
+        <line x1="17" y1="76" x2="37" y2="76"/>
+      </svg>
+    ),
+    tiki:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M10,16 L10,74 Q27,78 44,74 L44,16 Q27,12 10,16 Z" fill={f}/>
+        <ellipse cx="27" cy="16" rx="17" ry="4"/>
+        <path d="M17,32 C19,30 22,30 24,32"/><path d="M30,32 C32,30 35,30 37,32"/>
+        <path d="M21,44 C23,48 31,48 33,44"/>
+      </svg>
+    ),
+    mug:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M10,18 L10,72 L40,72 L40,18 Z" fill={f}/>
+        <line x1="10" y1="18" x2="40" y2="18"/>
+        <path d="M40,32 C50,32 52,44 50,50 C48,56 40,56 40,56"/>
+      </svg>
+    ),
+    pint:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M13,10 L10,74 L44,74 L41,10 Z" fill={f}/>
+        <line x1="13" y1="10" x2="41" y2="10"/>
+        <line x1="10" y1="74" x2="44" y2="74"/>
+      </svg>
+    ),
+    snifter:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M4,16 C2,32 8,52 20,58 L20,68 M50,16 C52,32 46,52 34,58 L34,68" />
+        <path d="M4,16 Q27,8 50,16"/>
+        <path d="M20,58 Q27,62 34,58" fill={f}/>
+        <line x1="20" y1="68" x2="34" y2="68"/>
+        <line x1="17" y1="72" x2="37" y2="72"/>
+        <line x1="14" y1="76" x2="40" y2="76"/>
+      </svg>
+    ),
+    tulip:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M14,10 C11,10 10,24 12,38 C10,50 12,66 16,74 L38,74 C42,66 44,50 42,38 C44,24 43,10 40,10 Z" fill={f}/>
+        <line x1="14" y1="10" x2="40" y2="10"/>
+        <line x1="16" y1="74" x2="38" y2="74"/>
+      </svg>
+    ),
+    weizen:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M18,10 C14,10 11,30 13,48 C11,62 9,74 9,78 L45,78 C45,74 43,62 41,48 C43,30 40,10 36,10 Z" fill={f}/>
+        <line x1="18" y1="10" x2="36" y2="10"/>
+        <line x1="9" y1="78" x2="45" y2="78"/>
+      </svg>
+    ),
+    goblet:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M5,14 C3,28 9,46 18,52 L18,64 M49,14 C51,28 45,46 36,52 L36,64" />
+        <path d="M5,14 Q27,8 49,14"/>
+        <path d="M18,52 Q27,56 36,52" fill={f}/>
+        <line x1="18" y1="64" x2="36" y2="64"/>
+        <line x1="13" y1="68" x2="41" y2="68"/>
+        <line x1="9" y1="72" x2="45" y2="72"/>
+        <line x1="6" y1="76" x2="48" y2="76"/>
+      </svg>
+    ),
+    margarita:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M2,18 Q27,10 52,18" />
+        <path d="M2,18 L14,42 Q18,52 27,56 Q36,52 40,42 L52,18" fill={f}/>
+        <line x1="27" y1="56" x2="27" y2="70"/>
+        <path d="M14,70 Q27,68 40,70" /><path d="M11,74 Q27,72 43,74" />
+      </svg>
+    ),
+    espresso:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M14,30 L16,58 L38,58 L40,30 Z" fill={f}/>
+        <line x1="14" y1="30" x2="40" y2="30"/>
+        <path d="M38,38 C46,38 48,50 46,54 C44,58 38,56 38,56"/>
+        <path d="M6,62 Q27,58 48,62 Q27,68 6,62 Z" fill={f}/>
+      </svg>
+    ),
+    cup:(
+      <svg viewBox="0 0 54 84" width={W} height={H} {...p}>
+        <path d="M10,22 L12,62 L42,62 L44,22 Z" fill={f}/>
+        <line x1="10" y1="22" x2="44" y2="22"/>
+        <path d="M42,32 C52,32 54,46 52,52 C50,58 42,56 42,56"/>
+        <path d="M4,66 Q27,62 50,66 Q27,72 4,66 Z" fill={f}/>
+      </svg>
+    ),
+  };
+  return shapes[type]||shapes.highball;
+}
+
+function GlassDisplay({glass}){
+  if(!glass) return null;
+  return(
+    <div style={{display:'flex',alignItems:'center',gap:'16px',padding:'14px 16px',background:'rgba(201,168,76,0.04)',border:'1px solid var(--border)',borderRadius:'var(--r2)',marginBottom:'12px'}}>
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px',minWidth:'48px'}}>
+        <GlassIcon glass={glass} size={68}/>
+        <span style={{fontSize:'9px',color:'var(--dim)',fontFamily:'var(--fd)',letterSpacing:'.08em',textTransform:'uppercase'}}>contenant</span>
+      </div>
+      <div>
+        <div style={{fontSize:'10px',color:'var(--dim)',fontFamily:'var(--fd)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:'4px'}}>Verre / Récipient</div>
+        <div style={{fontSize:'14px',color:'var(--gl)',fontWeight:'500',lineHeight:'1.4'}}>{glass}</div>
+      </div>
+    </div>
+  );
+}
+
 // ── AI GENERATION ──
 async function generateRecipe(item, category) {
   const prompts = {
@@ -750,6 +945,7 @@ function CocktailBody({data,equipMode}) {
   const eq = data.equipment||{};
   const equip = eq[equipMode]||eq.ideal||[];
   return(<>
+    <GlassDisplay glass={data.glass}/>
     <div>
       <div className="stitle">Matériel — {equipMode==="ideal"?"Idéal":equipMode==="debrouille"?"Débrouille":"Sans rien"}</div>
       <div className="eqlist">{equip.map((e,i)=><div key={i} className="eqitem">{e}</div>)}</div>
@@ -764,8 +960,8 @@ function CocktailBody({data,equipMode}) {
 
 function BeerBody({data}) {
   return(<>
+    <GlassDisplay glass={data.glass}/>
     {data.temperature&&<div><div className="stitle">Température</div><div className="scard" style={{background:"var(--s2)",border:"1px solid var(--border)",borderRadius:"var(--r2)",padding:"14px"}}><div className="sval big">{typeof data.temperature==="string"?data.temperature:Object.values(data.temperature).join(" / ")}</div></div></div>}
-    {data.glass&&<div className="tip"><span className="tip-ico">🥂</span>{data.glass}</div>}
     {data.style_notes&&<div className="tip"><span className="tip-ico">📝</span>{data.style_notes}</div>}
     {data.service_steps&&<div><div className="stitle">Service pression</div><div className="steps">{data.service_steps.map((s,i)=><div key={i} className="step" style={{animationDelay:`${i*60}ms`}}><div className="snum">{i+1}</div><div className="stxt">{s}</div></div>)}</div></div>}
     {data.bouteille_steps&&<div><div className="stitle">Service bouteille</div><div className="steps">{data.bouteille_steps.map((s,i)=><div key={i} className="step" style={{animationDelay:`${i*60}ms`}}><div className="snum">{i+1}</div><div className="stxt">{s}</div></div>)}</div></div>}
@@ -777,6 +973,7 @@ function BeerBody({data}) {
 
 function WineBody({data}) {
   return(<>
+    <GlassDisplay glass={data.glass}/>
     {data.temperature&&<div><div className="stitle">Températures de service</div><div className="sgrid">{typeof data.temperature==="string"?<div className="scard"><div className="sval big">{data.temperature}</div></div>:Object.entries(data.temperature).map(([k,v],i)=><div key={i} className="scard"><div className="slbl">{k}</div><div className="sval big">{v}</div></div>)}</div></div>}
     {data.glass&&<div className="tip"><span className="tip-ico">🥂</span>{data.glass}</div>}
     {data.decantation&&<div className="tip"><span className="tip-ico">🫙</span>{data.decantation}</div>}
@@ -793,6 +990,7 @@ function CoffeeBody({data,equipMode}) {
   const eq=data.equipment||{};
   const equip=eq[equipMode]||eq.ideal||[];
   return(<>
+    <GlassDisplay glass={data.glass}/>
     {data.dosage&&<div><div className="stitle">Dosages</div><div className="dtable">{Object.entries(data.dosage).map(([k,v],i)=>typeof v==="string"?<div key={i} className="drow"><span className="dkey">{k}</span><span className="dval">{v}</span></div>:null)}</div></div>}
     {eq&&<div><div className="stitle">Matériel — {equipMode==="ideal"?"Idéal":equipMode==="debrouille"?"Débrouille":"Sans rien"}</div><div className="eqlist">{equip.map((e,i)=><div key={i} className="eqitem">{e}</div>)}</div></div>}
     {data.steps&&<div><div className="stitle">Préparation</div><div className="steps">{data.steps.map((s,i)=><div key={i} className="step" style={{animationDelay:`${i*60}ms`}}><div className="snum">{i+1}</div><div className="stxt">{s}</div></div>)}</div></div>}
@@ -807,6 +1005,7 @@ function AutresBody({data,equipMode}) {
   const eq=data.equipment||{};
   const equip=eq[equipMode]||eq.ideal||[];
   return(<>
+    <GlassDisplay glass={data.glass}/>
     {data.description_complete&&<div className="tip"><span className="tip-ico">📖</span>{data.description_complete}</div>}
     {eq&&<div><div className="stitle">Matériel — {equipMode==="ideal"?"Idéal":equipMode==="debrouille"?"Débrouille":"Sans rien"}</div><div className="eqlist">{equip.map((e,i)=><div key={i} className="eqitem">{e}</div>)}</div></div>}
     {data.ingredients&&<div><div className="stitle">Ingrédients</div><div className="ings">{data.ingredients.map((ing,i)=><IngRow key={i} ing={ing}/>)}</div></div>}
