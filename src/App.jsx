@@ -860,17 +860,76 @@ function GlassIcon({glass='',size=72}){
   return shapes[type]||shapes.highball;
 }
 
-function GlassDisplay({glass}){
-  if(!glass) return null;
+const GLASS_ALTS = {
+  coupe:    ['Coupe à cocktail',   'Verre à Martini',    'Verre à vin blanc'],
+  martini:  ['Verre à Martini',    'Coupe à cocktail',   'Verre à champagne'],
+  rocks:    ['Verre Old Fashioned','Lowball / Rocks',    'Verre à whisky'],
+  highball: ['Verre Highball',     'Verre Collins',      'Grand verre droit'],
+  shot:     ['Verre à shot',       'Shooter verre droit','Petit rocks glass'],
+  flute:    ['Flûte à champagne',  'Coupe champagne',    'Verre à vin blanc'],
+  wine:     ['Verre à vin rouge',  'Verre universel',    'Verre Bordeaux'],
+  hurricane:['Verre Hurricane',    'Grand Highball',     'Verre Tiki'],
+  tiki:     ['Mug Tiki',           'Verre Hurricane',    'Highball'],
+  mug:      ['Mug en cuivre',      'Chope en verre',     'Highball classique'],
+  pint:     ['Verre pinte (Nonic)','Chope à bière',      'Verre tulipe bière'],
+  snifter:  ['Verre ballon',       'Snifter à cognac',   'Verre à Armagnac'],
+  tulip:    ['Verre tulipe craft', 'Verre pinte',        'Chope belge'],
+  weizen:   ['Verre Weizen',       'Grand verre droit',  'Verre tulipe'],
+  goblet:   ['Goblet / Calice',    'Verre tulipe belge', 'Verre rond trappiste'],
+  margarita:['Verre Margarita',    'Coupe à cocktail',   'Grand rocks salé'],
+  espresso: ['Tasse espresso',     'Tasse à café',       'Verre à shot'],
+  cup:      ['Tasse cappuccino',   'Tasse café au lait', 'Verre latte long'],
+  highball: ['Verre Highball',     'Verre Collins',      'Grand verre droit'],
+};
+
+function deriveGlassOptions(glass='', glassOptions=null){
+  if(Array.isArray(glassOptions)&&glassOptions.length>=2) return glassOptions.slice(0,3);
+  const type=getGlassType(glass);
+  const alts=[...(GLASS_ALTS[type]||['Highball','Verre droit','Verre polyvalent'])];
+  if(glass) alts[0]=glass;
+  return alts.slice(0,3);
+}
+
+function GlassOptions({glass='',glassOptions=null}){
+  const options=deriveGlassOptions(glass,glassOptions);
+  if(!options.length) return null;
   return(
-    <div style={{display:'flex',alignItems:'center',gap:'16px',padding:'14px 16px',background:'rgba(201,168,76,0.04)',border:'1px solid var(--border)',borderRadius:'var(--r2)',marginBottom:'12px'}}>
-      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px',minWidth:'48px'}}>
-        <GlassIcon glass={glass} size={68}/>
-        <span style={{fontSize:'9px',color:'var(--dim)',fontFamily:'var(--fd)',letterSpacing:'.08em',textTransform:'uppercase'}}>contenant</span>
-      </div>
-      <div>
-        <div style={{fontSize:'10px',color:'var(--dim)',fontFamily:'var(--fd)',letterSpacing:'.08em',textTransform:'uppercase',marginBottom:'4px'}}>Verre / Récipient</div>
-        <div style={{fontSize:'14px',color:'var(--gl)',fontWeight:'500',lineHeight:'1.4'}}>{glass}</div>
+    <div style={{marginBottom:'16px'}}>
+      <div className="stitle">Verres / Contenants possibles</div>
+      <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
+        {options.map((opt,i)=>(
+          <div key={i} style={{
+            display:'flex',flexDirection:'column',alignItems:'center',gap:'8px',
+            padding:'16px 12px 12px',flex:'1',minWidth:'90px',maxWidth:'140px',
+            background:i===0?'rgba(201,168,76,0.07)':'var(--s2)',
+            border:`1px solid ${i===0?'rgba(201,168,76,0.35)':'var(--border)'}`,
+            borderRadius:'var(--r2)',position:'relative',
+          }}>
+            {i===0&&<div style={{
+              position:'absolute',top:'-9px',left:'50%',transform:'translateX(-50%)',
+              background:'var(--gold)',color:'#07070f',fontSize:'8px',
+              fontFamily:'var(--fd)',letterSpacing:'.07em',padding:'2px 8px',
+              borderRadius:'50px',whiteSpace:'nowrap',fontWeight:'700',
+            }}>IDÉAL</div>}
+            {i===1&&<div style={{
+              position:'absolute',top:'-9px',left:'50%',transform:'translateX(-50%)',
+              background:'var(--s3)',color:'var(--muted)',fontSize:'8px',
+              fontFamily:'var(--fd)',letterSpacing:'.07em',padding:'2px 8px',
+              borderRadius:'50px',whiteSpace:'nowrap',border:'1px solid var(--border)',
+            }}>ALT. 1</div>}
+            {i===2&&<div style={{
+              position:'absolute',top:'-9px',left:'50%',transform:'translateX(-50%)',
+              background:'var(--s3)',color:'var(--dim)',fontSize:'8px',
+              fontFamily:'var(--fd)',letterSpacing:'.07em',padding:'2px 8px',
+              borderRadius:'50px',whiteSpace:'nowrap',border:'1px solid var(--border)',
+            }}>ALT. 2</div>}
+            <GlassIcon glass={opt} size={64}/>
+            <div style={{
+              fontSize:'11px',color:i===0?'var(--gl)':'var(--muted)',
+              textAlign:'center',lineHeight:'1.35',fontWeight:i===0?'500':'400',
+            }}>{opt}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -881,15 +940,15 @@ async function generateRecipe(item, category) {
   const prompts = {
     cocktails: `Tu es un barman expert. Fiche cocktail "${item.name}" (${item.origin}).
 JSON uniquement, sans markdown:
-{"glass":"verre exact","ingredients":[{"name":"...","amount":"...cl ou unité","alternatives":["alt1","alt2","alt3"]}],"equipment":{"ideal":["..."],"debrouille":["subst concrète 1","subst 2"],"rien":["étape sans matériel + mesures improvisées"]},"steps":["étape 1","étape 2","étape 3","étape 4"],"variations":[{"name":"...","recipe":"..."}],"tips":"conseil pro"}`,
+{"glass":"verre idéal exact","glass_options":["verre idéal","alternative possible 1","alternative possible 2"],"ingredients":[{"name":"...","amount":"...cl ou unité","alternatives":["alt1","alt2","alt3"]}],"equipment":{"ideal":["..."],"debrouille":["subst concrète 1","subst 2"],"rien":["étape sans matériel + mesures improvisées"]},"steps":["étape 1","étape 2","étape 3","étape 4"],"variations":[{"name":"...","recipe":"..."}],"tips":"conseil pro"}`,
     bieres: `Expert bière. Fiche service "${item.name}".
-JSON uniquement: {"temperature":"...","glass":"...","service_steps":["..."],"bouteille_steps":["..."],"alternatives":{"pb":"solution"},"accord":["..."],"style_notes":"...","examples":["marque1","marque2","marque3"]}`,
+JSON uniquement: {"temperature":"...","glass":"verre idéal","glass_options":["verre idéal","alternative 1","alternative 2"],"service_steps":["..."],"bouteille_steps":["..."],"alternatives":{"pb":"solution"},"accord":["..."],"style_notes":"...","examples":["marque1","marque2","marque3"]}`,
     vins: `Sommelier expert. Fiche service "${item.name}".
-JSON uniquement: {"temperature":{"type":"temp"},"glass":"...","service_steps":["..."],"decantation":"...","alternatives":{"pb":"solution"},"accord":["..."],"cepages":["..."],"regions":["..."],"conservation":"..."}`,
+JSON uniquement: {"temperature":{"type":"temp"},"glass":"verre idéal","glass_options":["verre idéal","alternative 1","alternative 2"],"service_steps":["..."],"decantation":"...","alternatives":{"pb":"solution"},"accord":["..."],"cepages":["..."],"regions":["..."],"conservation":"..."}`,
     cafes: `Barista expert. Fiche "${item.name}".
-JSON uniquement: {"dosage":{"param":"valeur"},"equipment":{"ideal":["..."],"debrouille":["..."],"rien":["..."]},"steps":["..."],"technique_lait":["..."],"alternatives_lait":["..."],"variations":[{"name":"...","recipe":"..."}],"tips":"..."}`,
+JSON uniquement: {"dosage":{"param":"valeur"},"glass":"contenant idéal","glass_options":["contenant idéal","alternative 1","alternative 2"],"equipment":{"ideal":["..."],"debrouille":["..."],"rien":["..."]},"steps":["..."],"technique_lait":["..."],"alternatives_lait":["..."],"variations":[{"name":"...","recipe":"..."}],"tips":"..."}`,
     autres: `Barman expert. Fiche complète "${item.name}" (catégorie: ${item.sub}).
-JSON uniquement: {"description_complete":"...","ingredients":[{"name":"...","amount":"...","alternatives":["..."]}],"equipment":{"ideal":["..."],"debrouille":["..."],"rien":["..."]},"steps":["..."],"tips":"...","notes":"info culturelle ou historique courte"}`,
+JSON uniquement: {"description_complete":"...","glass":"contenant idéal","glass_options":["contenant idéal","alternative 1","alternative 2"],"ingredients":[{"name":"...","amount":"...","alternatives":["..."]}],"equipment":{"ideal":["..."],"debrouille":["..."],"rien":["..."]},"steps":["..."],"tips":"...","notes":"info culturelle ou historique courte"}`,
   };
 
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY || '';
@@ -945,7 +1004,7 @@ function CocktailBody({data,equipMode}) {
   const eq = data.equipment||{};
   const equip = eq[equipMode]||eq.ideal||[];
   return(<>
-    <GlassDisplay glass={data.glass}/>
+    <GlassOptions glass={data.glass} glassOptions={data.glass_options}/>
     <div>
       <div className="stitle">Matériel — {equipMode==="ideal"?"Idéal":equipMode==="debrouille"?"Débrouille":"Sans rien"}</div>
       <div className="eqlist">{equip.map((e,i)=><div key={i} className="eqitem">{e}</div>)}</div>
@@ -960,7 +1019,7 @@ function CocktailBody({data,equipMode}) {
 
 function BeerBody({data}) {
   return(<>
-    <GlassDisplay glass={data.glass}/>
+    <GlassOptions glass={data.glass} glassOptions={data.glass_options}/>
     {data.temperature&&<div><div className="stitle">Température</div><div className="scard" style={{background:"var(--s2)",border:"1px solid var(--border)",borderRadius:"var(--r2)",padding:"14px"}}><div className="sval big">{typeof data.temperature==="string"?data.temperature:Object.values(data.temperature).join(" / ")}</div></div></div>}
     {data.style_notes&&<div className="tip"><span className="tip-ico">📝</span>{data.style_notes}</div>}
     {data.service_steps&&<div><div className="stitle">Service pression</div><div className="steps">{data.service_steps.map((s,i)=><div key={i} className="step" style={{animationDelay:`${i*60}ms`}}><div className="snum">{i+1}</div><div className="stxt">{s}</div></div>)}</div></div>}
@@ -973,7 +1032,7 @@ function BeerBody({data}) {
 
 function WineBody({data}) {
   return(<>
-    <GlassDisplay glass={data.glass}/>
+    <GlassOptions glass={data.glass} glassOptions={data.glass_options}/>
     {data.temperature&&<div><div className="stitle">Températures de service</div><div className="sgrid">{typeof data.temperature==="string"?<div className="scard"><div className="sval big">{data.temperature}</div></div>:Object.entries(data.temperature).map(([k,v],i)=><div key={i} className="scard"><div className="slbl">{k}</div><div className="sval big">{v}</div></div>)}</div></div>}
     {data.glass&&<div className="tip"><span className="tip-ico">🥂</span>{data.glass}</div>}
     {data.decantation&&<div className="tip"><span className="tip-ico">🫙</span>{data.decantation}</div>}
@@ -990,7 +1049,7 @@ function CoffeeBody({data,equipMode}) {
   const eq=data.equipment||{};
   const equip=eq[equipMode]||eq.ideal||[];
   return(<>
-    <GlassDisplay glass={data.glass}/>
+    <GlassOptions glass={data.glass} glassOptions={data.glass_options}/>
     {data.dosage&&<div><div className="stitle">Dosages</div><div className="dtable">{Object.entries(data.dosage).map(([k,v],i)=>typeof v==="string"?<div key={i} className="drow"><span className="dkey">{k}</span><span className="dval">{v}</span></div>:null)}</div></div>}
     {eq&&<div><div className="stitle">Matériel — {equipMode==="ideal"?"Idéal":equipMode==="debrouille"?"Débrouille":"Sans rien"}</div><div className="eqlist">{equip.map((e,i)=><div key={i} className="eqitem">{e}</div>)}</div></div>}
     {data.steps&&<div><div className="stitle">Préparation</div><div className="steps">{data.steps.map((s,i)=><div key={i} className="step" style={{animationDelay:`${i*60}ms`}}><div className="snum">{i+1}</div><div className="stxt">{s}</div></div>)}</div></div>}
@@ -1005,7 +1064,7 @@ function AutresBody({data,equipMode}) {
   const eq=data.equipment||{};
   const equip=eq[equipMode]||eq.ideal||[];
   return(<>
-    <GlassDisplay glass={data.glass}/>
+    <GlassOptions glass={data.glass} glassOptions={data.glass_options}/>
     {data.description_complete&&<div className="tip"><span className="tip-ico">📖</span>{data.description_complete}</div>}
     {eq&&<div><div className="stitle">Matériel — {equipMode==="ideal"?"Idéal":equipMode==="debrouille"?"Débrouille":"Sans rien"}</div><div className="eqlist">{equip.map((e,i)=><div key={i} className="eqitem">{e}</div>)}</div></div>}
     {data.ingredients&&<div><div className="stitle">Ingrédients</div><div className="ings">{data.ingredients.map((ing,i)=><IngRow key={i} ing={ing}/>)}</div></div>}
